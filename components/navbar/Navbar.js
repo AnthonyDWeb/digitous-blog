@@ -7,8 +7,8 @@ export default function Navbar() {
 
     return (
         <View style={styles.container}>
-            <Links to="/home">Home</Links>
-            <Links to="/post">Post</Links>
+            <Links to="/home">My post</Links>
+            <Links to="/post">New Post</Links>
             <Links to="/profile">Profile</Links>
         </View>
     )

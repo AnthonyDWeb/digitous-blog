@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { NativeRouter, Route } from 'react-router-native'
 import Homepage from './Views/Homepage';
 import Login from './Views/Login';
@@ -9,17 +9,19 @@ import { LoginContext } from './context/LoginContext';
 
 export default function App() {
     const [isLogged, setIsLogged] = useState(false)
-    const [pageSelected,setPageSelected] = useState("Home")
+    const [loginId, setLoginId] = useState(null)
+    const [pageSelected,setPageSelected] = useState("My post")
+    const [page, setPage] = useState([])
+    const [lastPage, setLastPage] = useState("")
+
 
     const setAuth = () =>{ setIsLogged(!isLogged)  }
 
-
-    console.log('is logged in login -> ', isLogged)
     return (
       <View style={styles.container}>
           <NativeRouter style={styles.Route} >
-          <LoginContext.Provider value={{isLogged, setAuth}}>
-                <PageContext.Provider value={{pageSelected,setPageSelected}}>
+          <LoginContext.Provider value={{isLogged,loginId, setLoginId, setAuth}}>
+                <PageContext.Provider value={{pageSelected,setPageSelected, lastPage, setLastPage, page, setPage}}>
                       {isLogged ? 
                         <Route  path="/home" component={Homepage} /> :
                         <Route  exact path="/" component={Login} /> 
