@@ -1,19 +1,23 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Navbar from '../components/navbar/Navbar'
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
+import { useHistory } from 'react-router-native'
 import { PageContext } from '../context/PageContext'
 import { LoginContext } from '../context/LoginContext'
+
 
 export default function Homepage() {
   const {pageSelected, setPageSelected} = useContext(PageContext);
   const {page, setPage} = useContext(PageContext);
   const {lastPage} = useContext(PageContext);
-  const {loginId, setLoginId} = useContext(LoginContext)
+  const {loginId, setAuth} = useContext(LoginContext)
 
   const [user, setUser] = useState([])
   const [post, setPost] = useState([])
   const [comment, setComment] = useState([])
   
+	const history = useHistory();
+
 
     useEffect(()=>{
       
@@ -41,16 +45,21 @@ export default function Homepage() {
     },[])
 
 
+
     const lastPageSelected = async() => { 
-      console.log(`lastpageselected /${lastPage}`)
-      setPageSelected(page[page.length -1])
-      await setPage(prev => {
-        prev.pop()
-        return page
-      })
-      // history.push(`/${lastPage}`)
+        {page.length > 0 &&
+            setPageSelected(page[page.length -1])
+            await setPage(prev => {
+                prev.pop()
+                return page
+            })
+        }
     }
-    // const lastPageSelected = () => { setPageSelected(lastPage)}
+
+    const logout = () => {
+      setAuth()
+      history.push("/")
+    }
 
     const renderHomepage = ({item}) => {
 
@@ -80,16 +89,21 @@ export default function Homepage() {
       </>
     }
     
-    console.log('page',page);
-    console.log('last page',page[page.length -1]);
+    // console.log('page',page);
+    // console.log('last page',page[page.length -1]);
 
 
     return (
         <View style={styles.container}>
           <View style={styles.subContainer}>
+            {page.length > 0 && 
             <TouchableOpacity onPress={lastPageSelected}>
                 <Text>Back</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
+            {page.length === 0 && 
+            <TouchableOpacity onPress={logout}>
+                <Text>Logout</Text>
+            </TouchableOpacity>}
           <Text style={styles.mainTitle}>{pageSelected}</Text> 
           </View>
           {pageSelected === "My post" && <FlatList data={post} renderItem={renderHomepage} keyExtractor={(_item, index) => index}/>}

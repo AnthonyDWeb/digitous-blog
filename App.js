@@ -16,7 +16,8 @@ export default function App() {
 
 
     const setAuth = () =>{ setIsLogged(!isLogged)  }
-
+    
+  console.log('login', isLogged)
     return (
       <View style={styles.container}>
           <NativeRouter style={styles.Route} >
